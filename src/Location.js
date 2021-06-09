@@ -21,5 +21,3 @@ const styles = StyleSheet.create({
 });
 
 export default Location;
-
-//{errorMsg ? <Text>Please enable location services</Text> : null}
