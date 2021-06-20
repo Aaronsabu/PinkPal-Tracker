@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Platform, SafeAreaView } from 'react-native';
 import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
+import * as Location from 'expo-location';
 import PubNubReact from 'pubnub-react';
 
 const LATITUDE = 10.2315;
@@ -15,6 +16,7 @@ class Map extends React.Component {
     this.state = {
       latitude: LATITUDE,
       longitude: LONGITUDE,
+      errorMsg:"",
       coordinate: new AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -40,8 +42,8 @@ class Map extends React.Component {
       } 
     )();
   };
-
-  subscribeToPubNub = () => {
+  async subscribeToPubNub () {
+    console.log("Everythings fine");
     this.pubnub.subscribe({
       channels: ['location'],
       withPresence: true,
@@ -53,12 +55,8 @@ class Map extends React.Component {
       const newCoordinate = { latitude, longitude };
 
       if (Platform.OS === 'android') {
-        if (this.marker) {
-          this.marker._component.animateMarkerToCoordinate(newCoordinate, 500);
-        }
-      } else {
-        coordinate.timing(newCoordinate).start();
-      }
+          coordinate.timing(newCoordinate).start();
+      } 
 
       this.setState({
         latitude,
@@ -84,7 +82,7 @@ class Map extends React.Component {
             followUserLocation
             loadingEnabled
             ref={c => (this.mapView = c)}
-            region={this.state.latitude ? this.getMapRegion() : null}
+            region={this.getMapRegion()}
           >
             <Marker.Animated
               ref={marker => {
@@ -107,3 +105,5 @@ const styles = StyleSheet.create({
 });
 
 export default Map;
+
+//this.state.latitude ? : null 
